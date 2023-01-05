@@ -1,3 +1,14 @@
 public class Professor {
-    public static final int ACCESS = 1;
+
+    public void create(Student student){
+
+    }
+
+    public void update(Student student){
+
+    }
+
+    public void delete(Student student){
+
+    }
 }
