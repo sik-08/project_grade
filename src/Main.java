@@ -1,15 +1,19 @@
-import java.util.Objects;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
-    public static void main(String[] args){
-        int a = 10;
-        int b = 20;
-        Integer a2 = 10;
-        Integer b2 = 20;
+    public static void main(String[] args) throws IOException {
+       /* boolean run = true;
 
-        System.out.println(Objects.hashCode(a));
-        System.out.println(Objects.hashCode(b));
-        System.out.println(a2.hashCode());
-        System.out.println(b2.hashCode());
+        // 메뉴 선택 번호
+        int select = 0;
+
+        while(run){
+
+        }*/
+
+        ArrayList<Integer> ary = new ArrayList<>(5);
+        ary.add(10);
+        System.out.println(ary.size());
     }
 }
