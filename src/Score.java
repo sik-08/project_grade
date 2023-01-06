@@ -9,6 +9,13 @@ public class Score{
         this.score = "미입력";
     }
 
+    Score(String subject, String grade, String score){
+        this.subject = subject;
+        this.grade = grade;
+        this.score = score;
+    }
+
+
     public static void printCourse(){
         System.out.println("\n2023년도 1학기 강의 목록입니다.\n");
 

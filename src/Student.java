@@ -1,21 +1,24 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.StringTokenizer;
 
 public class Student {
-    private final String studentNum; // 학번
-    public String name; // 이름
-    public int year; // 학년
+    private String studentNum; // 학번
+    private String name; // 이름
+    private int year; // 학년
     private ArrayList<Score> score = new ArrayList<>(5); // 점수 정보
 
-    public Student() throws IOException {
+    public Student(){
+
+    }
+    public Student(int code) throws IOException {
+        if(code != 2) System.exit(1);
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("------------------------------------------------------");
-        System.out.println("[성적 산출 프로그램 신규 등록]");
+        System.out.println("[학생 신규 등록]");
         System.out.println("***     학생 정보를 입력하여주십시오.    ***");
 
         System.out.print("- 학번 : "); studentNum = br.readLine();
@@ -56,11 +59,48 @@ public class Student {
         System.out.println("------------------------------------------------------");
     }
 
+    public static Student insertData(StringTokenizer st){
+        Student student = new Student();
+        student.studentNum = st.nextToken();
+        student.name = st.nextToken();
+        student.year = Integer.parseInt(st.nextToken());
+
+        do{
+            student.score.add(new Score(st.nextToken(), st.nextToken(), st.nextToken()));
+        }while(st.hasMoreTokens());
+
+        return student;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public ArrayList<Score> getScore() {
         return score;
     }
 
+    public void setScore(ArrayList<Score> score) {
+        this.score = score;
+    }
+
     public String getStudentNum() {
         return studentNum;
+    }
+
+    public void setStudentNum(String studentNum) {
+        this.studentNum = studentNum;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 }
