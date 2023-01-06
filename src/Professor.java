@@ -1,14 +1,14 @@
+import java.util.ArrayList;
+
 public class Professor {
 
-    public void create(Student student){
-
-    }
+    private ArrayList<Score> score;
 
     public void update(Student student){
-
+        score = student.getScore();
     }
 
-    public void delete(Student student){
+    public void modify(Student student){
 
     }
 }
