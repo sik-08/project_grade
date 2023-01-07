@@ -17,7 +17,7 @@ public class Score{
 
 
     public static void printCourse(){
-        System.out.println("\n2023년도 1학기 강의 목록입니다.\n");
+        System.out.println("\n2023년도 1학기 강의 목록입니다.");
 
         System.out.println("[데이터 구조] "
                 + "[웹 프로그래밍] "
@@ -27,6 +27,6 @@ public class Score{
     }
 
     public void printScore(){
-        System.out.println("| " + subject + " | " + score + " | " + grade + " |");
+        System.out.printf("|%-20s|%5s|%5s|\n",subject,score,grade);
     }
 }

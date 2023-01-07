@@ -12,6 +12,8 @@ public class Student {
     public Student(){
 
     }
+
+    // 코드를 받았다면 신규 등록으로 처리
     public Student(int code) throws IOException {
         if(code != 2) System.exit(1);
 
@@ -43,35 +45,23 @@ public class Student {
         for(String s : subject)
             score.add(new Score(s));
 
-        br.close();
-
         System.out.println("***     등록이 완료되었습니다.    ***");
         System.out.println("------------------------------------------------------");
     }
 
+    // 학생의 정보를 출력하는 메소드
     public void printProfile(){
         System.out.println("------------------------------------------------------");
         System.out.println("[" + name + " 학생 정보]");
-        System.out.println("| " + studentNum + " | " + name + " | " + year + "학년 |\n");
+        System.out.println("|\t학번\t\t\t|\t이름\t\t|\t학년\t\t|");
+        System.out.println("|\t" + studentNum + "\t|\t" + name + "\t|\t" + year + "학년\t|\n");
 
         System.out.println("[" + name + " 학생 수강 목록]");
-        for(Score s : score) System.out.println("| " + s.subject + " |");
-        System.out.println("------------------------------------------------------");
+        for(Score s : score) System.out.print("| " + s.subject + " | ");
+        System.out.println("\n------------------------------------------------------");
     }
 
-    public static Student insertData(StringTokenizer st){
-        Student student = new Student();
-        student.studentNum = st.nextToken();
-        student.name = st.nextToken();
-        student.year = Integer.parseInt(st.nextToken());
-
-        do{
-            student.score.add(new Score(st.nextToken(), st.nextToken(), st.nextToken()));
-        }while(st.hasMoreTokens());
-
-        return student;
-    }
-
+    // Getter , Setter
     public String getName() {
         return name;
     }
