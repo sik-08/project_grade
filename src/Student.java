@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 public class Student {
     private String studentNum; // 학번
     private String name; // 이름
-    private int year; // 학년
+    private String year; // 학년
     private ArrayList<Score> score = new ArrayList<>(5); // 점수 정보
 
     public Student(){
@@ -27,7 +27,7 @@ public class Student {
 
         System.out.print("- 이름 : "); name = br.readLine();
 
-        System.out.print("- 학년 : "); year = Integer.parseInt(br.readLine());
+        System.out.print("- 학년 : "); year = br.readLine();
 
         Score.printCourse();
 
@@ -86,11 +86,11 @@ public class Student {
         this.studentNum = studentNum;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 }

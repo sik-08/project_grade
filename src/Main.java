@@ -3,6 +3,15 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        // 백업을 위해 최초 학생 리스트의 크기를 저장
+        int lastMark;
+
+        // 최초 사이즈와 현재 사이즈를 비교하기 위한 변수
+        int currentMark;
+        
+        // 성적 변경점 체크
+        boolean check = false;
+        
         // 교수가 접속했다면 true
         boolean prof_run = false;
 
@@ -33,6 +42,10 @@ public class Main {
             students.add(student);
         }
         student = null;
+
+        // 사이즈 마킹
+        lastMark = students.size();
+        currentMark = students.size();
 
         System.out.println("[국립강릉원주대학교 성적 관리 프로그램]\n");
         printNotice();
@@ -79,6 +92,7 @@ public class Main {
                 if(Integer.parseInt(br.readLine()) == 2){
                     student = new Student(2);
                     students.add(student);
+                    currentMark++;
                 }
                 else{
                     System.out.println("이름을 입력해주세요.");
@@ -122,10 +136,10 @@ public class Main {
                     System.out.println();
 
                     professor.update(student);
+                    check = true;
                     break;
 
                 case 2:
-                    br.close();
                     prof_run = false;
             }
         }
@@ -151,11 +165,24 @@ public class Main {
                     break;
 
                 case 3:
-                    br.close();
                     stud_run = false;
             }
         }
 
+        // 변경점이 존재한다면 데이터 백업
+        if(lastMark < currentMark || check){
+            System.out.println("데이터 백업 중");
+            try{
+                for(int i = 0; i < 3; i++){
+                    Thread.sleep(300);
+                    System.out.println(".");
+                }
+            }catch(InterruptedException e){
+                System.out.println(e.getMessage());
+            }
+            backup(students);
+        }
+        
         System.out.println("\n프로그램을 종료합니다.\n좋은 하루 보내세요.\n");
     }
 
@@ -170,7 +197,7 @@ public class Main {
             System.out.print(students.get(i).getName() +"  ");
             if((i + 1) % 5 == 0) System.out.println();
         }
-        System.out.println("---------------------");
+        System.out.println("\n---------------------");
     }
 
     public static Student searchStudent(ArrayList<Student> students, String name){
@@ -186,7 +213,7 @@ public class Main {
 
         student.setStudentNum(st.nextToken());
         student.setName(st.nextToken());
-        student.setYear(Integer.parseInt(st.nextToken()));
+        student.setYear(st.nextToken());
 
         while(st.hasMoreTokens()){
             student.getScore().add(new Score(st.nextToken(), st.nextToken(), st.nextToken()));
@@ -194,7 +221,32 @@ public class Main {
         return student;
     }
 
-    public static void backup(){
+    public static void backup(ArrayList<Student> students) throws IOException{
+        // DATA.txt 에 백업
+        BufferedWriter bw = new BufferedWriter(new FileWriter("src\\DATA.txt"));
 
+        StringBuilder sb = new StringBuilder();
+        Student student;
+
+        for(Student value : students) {
+            student = value;
+            sb.append(student.getStudentNum()).append(",");
+            sb.append(student.getName()).append(",");
+            sb.append(student.getYear());
+
+            for (Score s : student.getScore()) {
+                sb.append(",");
+                sb.append(s.getSubject());
+                sb.append(",");
+                sb.append(s.getScore());
+                sb.append(",");
+                sb.append(s.getGrade());
+            }
+            bw.write(sb.toString());
+            bw.flush();
+            sb.setLength(0);
+            bw.newLine();
+        }
+        bw.close();
     }
 }
