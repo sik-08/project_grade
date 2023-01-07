@@ -57,7 +57,7 @@ public class Student {
         System.out.println("|\t" + studentNum + "\t|\t" + name + "\t|\t" + year + "학년\t|\n");
 
         System.out.println("[" + name + " 학생 수강 목록]");
-        for(Score s : score) System.out.print("| " + s.subject + " | ");
+        for(Score s : score) System.out.print("| " + s.getSubject() + " | ");
         System.out.println("\n------------------------------------------------------");
     }
 

@@ -34,13 +34,14 @@ public class Main {
         }
         student = null;
 
-        System.out.println("[국립강릉원주대학교 성적 산출 프로그램]\n");
+        System.out.println("[국립강릉원주대학교 성적 관리 프로그램]\n");
         printNotice();
         try{
             for(int i = 0; i < 5; i++){
                 Thread.sleep(500);
                 System.out.println(".");
             }
+            System.out.println();
         }catch(InterruptedException e){
             System.out.println(e.getMessage());
         }
@@ -102,11 +103,11 @@ public class Main {
                 break;
         }
 
+        // 교수
         while(prof_run) {
             System.out.println("메뉴를 선택해주세요.\n");
-            System.out.println("[1] 학생 성적 입력\n"
-                    + "[2] 학생 성적 수정\n"
-                    + "[3] 프로그램 종료\n");
+            System.out.println("[1] 학생 성적 입력 및 변경\n"
+                    + "[2] 프로그램 종료\n");
 
             select = Integer.parseInt(br.readLine());
 
@@ -124,21 +125,12 @@ public class Main {
                     break;
 
                 case 2:
-                    printStudents(students);
-                    System.out.println("성적을 수정할 학생의 이름을 입력해주세요.");
-                    System.out.print("-> ");
-
-                    student = Objects.requireNonNull(searchStudent(students, br.readLine()), "존재하지 않는 학생입니다.");
-
-                    System.out.println();
-
-                    professor.modify(student);
-                    break;
-
-                case 3:
+                    br.close();
                     prof_run = false;
             }
         }
+        
+        // 학생
         while(stud_run){
             System.out.println("메뉴를 선택해주세요.\n");
             System.out.println("[1] 성적 조회\n"
@@ -159,6 +151,7 @@ public class Main {
                     break;
 
                 case 3:
+                    br.close();
                     stud_run = false;
             }
         }
@@ -190,6 +183,7 @@ public class Main {
 
     public static Student insertData(StringTokenizer st){
         Student student = new Student();
+
         student.setStudentNum(st.nextToken());
         student.setName(st.nextToken());
         student.setYear(Integer.parseInt(st.nextToken()));
@@ -197,7 +191,10 @@ public class Main {
         while(st.hasMoreTokens()){
             student.getScore().add(new Score(st.nextToken(), st.nextToken(), st.nextToken()));
         }
-
         return student;
+    }
+
+    public static void backup(){
+
     }
 }

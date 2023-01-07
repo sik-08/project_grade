@@ -1,18 +1,18 @@
 public class Score{
-    public String subject;
-    public String grade;
-    public String score;
+    private String subject;
+    private String score;
+    private String grade;
 
     Score(String subject){
         this.subject = subject;
-        this.grade = "미입력";
         this.score = "미입력";
+        this.grade = "미입력";
     }
 
-    Score(String subject, String grade, String score){
+    Score(String subject, String score, String grade){
         this.subject = subject;
-        this.grade = grade;
         this.score = score;
+        this.grade = grade;
     }
 
 
@@ -28,5 +28,31 @@ public class Score{
 
     public void printScore(){
         System.out.printf("|%-20s|%5s|%5s|\n",subject,score,grade);
+    }
+
+    // Getter, Setter
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 }
