@@ -43,7 +43,7 @@ public class Professor {
             System.out.print("등급 : ");
             score.get(index).setGrade(br.readLine());
 
-            System.out.println("성적을 확정하시겠습니까?\n"
+            System.out.println("\n성적을 확정하시겠습니까?\n"
                         + "[1] 예 [2] 아니오");
 
             if(br.readLine().equals("1")) run = false;
