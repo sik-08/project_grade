@@ -152,7 +152,7 @@ public class Main {
             select = Integer.parseInt(br.readLine());
             switch(select){
                 case 1:
-                    ArrayList<Score> score = Objects.requireNonNull(student).getScore();
+                    ArrayList<Score> score = student.getScore();
                     for(Score s : score){
                         s.printScore();
                     }
