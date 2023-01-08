@@ -47,7 +47,7 @@ public class Main {
         lastMark = students.size();
         currentMark = students.size();
 
-        System.out.println("[국립강릉원주대학교 성적 관리 프로그램]\n");
+        System.out.println("[자바대학교 성적 관리 프로그램]\n");
         printNotice();
         try{
             for(int i = 0; i < 5; i++){
@@ -84,8 +84,9 @@ public class Main {
                 }
 
                 break;
+
             case 2:
-                System.out.println("등록 이력이 있습니까?");
+                System.out.println("\n등록 이력이 있습니까?");
                 System.out.println("[1] 예 [2] 아니오");
                 System.out.print("-> ");
 
@@ -122,6 +123,7 @@ public class Main {
             System.out.println("메뉴를 선택해주세요.\n");
             System.out.println("[1] 학생 성적 입력 및 변경\n"
                     + "[2] 프로그램 종료\n");
+            System.out.print("-> ");
 
             select = Integer.parseInt(br.readLine());
 
@@ -187,7 +189,7 @@ public class Main {
     }
 
     public static void printNotice(){
-        System.out.println("본 프로그램은 국립강릉원주대학교(원주캠퍼스) 컴퓨터공학과의 성적 관리 프로그램입니다.\n" +
+        System.out.println("본 프로그램은 자바대학교 컴퓨터공학과의 성적 관리 프로그램입니다.\n" +
                 "부당한 방법으로 개인 성적의 위,변조를 시도할 경우 학칙에 의거하여 징계처리될 수 있습니다.");
     }
 

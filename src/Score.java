@@ -27,7 +27,7 @@ public class Score{
     }
 
     public void printScore(){
-        System.out.printf("|%-20s|%5s|%5s|\n",subject,score,grade);
+        System.out.printf("[ %s ] / [ %s ] / [ %s ]\n",subject,score,grade);
     }
 
     // Getter, Setter

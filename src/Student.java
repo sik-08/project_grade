@@ -24,9 +24,7 @@ public class Student {
         System.out.println("***     학생 정보를 입력하여주십시오.    ***");
 
         System.out.print("- 학번 : "); studentNum = br.readLine();
-
         System.out.print("- 이름 : "); name = br.readLine();
-
         System.out.print("- 학년 : "); year = br.readLine();
 
         Score.printCourse();

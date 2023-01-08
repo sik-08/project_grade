@@ -45,6 +45,7 @@ public class Professor {
 
             System.out.println("\n성적을 확정하시겠습니까?\n"
                         + "[1] 예 [2] 아니오");
+            System.out.print("-> ");
 
             if(br.readLine().equals("1")) run = false;
         }
