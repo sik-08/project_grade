@@ -3,23 +3,17 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        // 백업을 위해 최초 학생 리스트의 크기를 저장
-        int lastMark;
-
         // 최초 사이즈와 현재 사이즈를 비교하기 위한 변수
-        int currentMark;
+        int lastMark, currentMark;
         
         // 성적 변경점 체크
         boolean check = false;
-        
+
         // 교수가 접속했다면 true
         boolean prof_run = false;
 
         // 학생이 접속했다면 true
         boolean stud_run = false;
-
-        // 초기 데이터를 삽입하기 위한 변수
-        String data;
 
         // 성적을 입력할 교수
         Professor professor = null;
@@ -30,12 +24,11 @@ public class Main {
         // 학생들의 배열
         ArrayList<Student> students = new ArrayList<>();
 
-        // 메뉴 선택 번호
-        int select;
-
         // 입력받기 위한 BufferedReader
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
+        // 백업 데이터 로드
+        String data;
         BufferedReader input = new BufferedReader(new FileReader("src\\DATA.txt"));
         while((data = input.readLine()) != null){
             student = insertData(new StringTokenizer(data, ","));
@@ -43,11 +36,11 @@ public class Main {
         }
         student = null;
 
-        // 사이즈 마킹
+        // 프로그램 시작, 학생 배열의 사이즈 마킹
         lastMark = students.size();
         currentMark = students.size();
 
-        System.out.println("[자바대학교 성적 관리 프로그램]\n");
+        System.out.println("[대학교 성적 관리 프로그램]\n");
         printNotice();
         try{
             for(int i = 0; i < 5; i++){
@@ -58,6 +51,9 @@ public class Main {
         }catch(InterruptedException e){
             System.out.println(e.getMessage());
         }
+
+        // 메뉴 선택 번호
+        int select;
 
         System.out.println("사용자 정보를 선택하여 주십시오.");
         System.out.println("[1] 교직원 [2] 학생");
@@ -189,7 +185,7 @@ public class Main {
     }
 
     public static void printNotice(){
-        System.out.println("본 프로그램은 자바대학교 컴퓨터공학과의 성적 관리 프로그램입니다.\n" +
+        System.out.println("본 프로그램은 컴퓨터공학과의 성적 관리 프로그램입니다.\n" +
                 "부당한 방법으로 개인 성적의 위,변조를 시도할 경우 학칙에 의거하여 징계처리될 수 있습니다.");
     }
 
