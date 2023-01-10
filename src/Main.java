@@ -5,15 +5,15 @@ public class Main {
     public static void main(String[] args) throws IOException {
         // 최초 사이즈와 현재 사이즈를 비교하기 위한 변수
         int lastMark, currentMark;
-        
+
         // 성적 변경점 체크
         boolean check = false;
 
         // 교수가 접속했다면 true
-        boolean prof_run = false;
+        boolean professorStart = false;
 
         // 학생이 접속했다면 true
-        boolean stud_run = false;
+        boolean studentStart = false;
 
         // 성적을 입력할 교수
         Professor professor = null;
@@ -28,11 +28,15 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         // 백업 데이터 로드
-        String data;
-        BufferedReader input = new BufferedReader(new FileReader("src\\DATA.txt"));
-        while((data = input.readLine()) != null){
-            student = insertData(new StringTokenizer(data, ","));
-            students.add(student);
+        try{
+            String data;
+            BufferedReader input = new BufferedReader(new FileReader("src\\DATA.txt"));
+            while((data = input.readLine()) != null){
+                student = inputData(new StringTokenizer(data, ","));
+                students.add(student);
+            }
+        }catch(FileNotFoundException e){
+            System.out.println(e.getMessage());
         }
         student = null;
 
@@ -42,15 +46,6 @@ public class Main {
 
         System.out.println("[대학교 성적 관리 프로그램]\n");
         printNotice();
-        try{
-            for(int i = 0; i < 5; i++){
-                Thread.sleep(500);
-                System.out.println(".");
-            }
-            System.out.println();
-        }catch(InterruptedException e){
-            System.out.println(e.getMessage());
-        }
 
         // 메뉴 선택 번호
         int select;
@@ -72,7 +67,7 @@ public class Main {
 
                 System.out.println("\n* 접속 성공 *\n");
                 professor = new Professor();
-                prof_run = true;
+                professorStart = true;
 
                 if(students.size() == 0){
                     System.out.println("관리할 학생 정보가 없습니다.");
@@ -109,13 +104,13 @@ public class Main {
                 }
 
                 System.out.println("\n*** " + student.getName() + "님 환영합니다. ***\n");
-                stud_run = true;
+                studentStart = true;
 
                 break;
         }
 
         // 교수
-        while(prof_run) {
+        while(professorStart) {
             System.out.println("메뉴를 선택해주세요.\n");
             System.out.println("[1] 학생 성적 입력 및 변경\n"
                     + "[2] 프로그램 종료\n");
@@ -138,12 +133,12 @@ public class Main {
                     break;
 
                 case 2:
-                    prof_run = false;
+                    professorStart = false;
             }
         }
         
         // 학생
-        while(stud_run){
+        while(studentStart){
             System.out.println("메뉴를 선택해주세요.\n");
             System.out.println("[1] 성적 조회\n"
                         + "[2] 내 정보 보기\n"
@@ -163,25 +158,14 @@ public class Main {
                     break;
 
                 case 3:
-                    stud_run = false;
+                    studentStart = false;
             }
         }
 
         // 변경점이 존재한다면 데이터 백업
-        if(lastMark < currentMark || check){
-            System.out.println("데이터 백업 중");
-            try{
-                for(int i = 0; i < 3; i++){
-                    Thread.sleep(300);
-                    System.out.println(".");
-                }
-            }catch(InterruptedException e){
-                System.out.println(e.getMessage());
-            }
-            backup(students);
-        }
+        if(lastMark < currentMark || check) outputData(students);
         
-        System.out.println("\n프로그램을 종료합니다.\n좋은 하루 보내세요.\n");
+        System.out.println("\n프로그램을 종료합니다. 좋은 하루 보내세요.\n");
     }
 
     public static void printNotice(){
@@ -206,7 +190,7 @@ public class Main {
         return null;
     }
 
-    public static Student insertData(StringTokenizer st){
+    public static Student inputData(StringTokenizer st){
         Student student = new Student();
 
         student.setStudentNum(st.nextToken());
@@ -219,7 +203,7 @@ public class Main {
         return student;
     }
 
-    public static void backup(ArrayList<Student> students) throws IOException{
+    public static void outputData(ArrayList<Student> students) throws IOException{
         // DATA.txt 에 백업
         BufferedWriter bw = new BufferedWriter(new FileWriter("src\\DATA.txt"));
 
@@ -228,17 +212,15 @@ public class Main {
 
         for(Student value : students) {
             student = value;
-            sb.append(student.getStudentNum()).append(",");
-            sb.append(student.getName()).append(",");
-            sb.append(student.getYear());
+            sb.append(student.getStudentNum()).append(",")
+            .append(student.getName()).append(",")
+            .append(student.getYear());
 
             for (Score s : student.getScore()) {
-                sb.append(",");
-                sb.append(s.getSubject());
-                sb.append(",");
-                sb.append(s.getScore());
-                sb.append(",");
-                sb.append(s.getGrade());
+                sb.append(",")
+                .append(s.getSubject()).append(",")
+                .append(s.getScore()).append(",")
+                .append(s.getGrade());
             }
             bw.write(sb.toString());
             bw.flush();
