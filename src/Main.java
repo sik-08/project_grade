@@ -2,12 +2,11 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+    private static boolean check; // 데이터의 변경점이 있는지 체크
+
     public static void main(String[] args) throws IOException {
         // 최초 사이즈와 현재 사이즈를 비교하기 위한 변수
         int lastMark, currentMark;
-
-        // 성적 변경점 체크
-        boolean check = false;
 
         // 교수가 접속했다면 true
         boolean professorStart = false;
@@ -19,26 +18,13 @@ public class Main {
         Professor professor = null;
 
         // 성적을 입력받을 학생
-        Student student;
+        Student student = null;
 
-        // 학생들의 배열
-        ArrayList<Student> students = new ArrayList<>();
+        // 데이터 불러오기
+        ArrayList<Student> students = loadData();
 
         // 입력받기 위한 BufferedReader
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        // 백업 데이터 로드
-        try{
-            String data;
-            BufferedReader input = new BufferedReader(new FileReader("src\\DATA.txt"));
-            while((data = input.readLine()) != null){
-                student = inputData(new StringTokenizer(data, ","));
-                students.add(student);
-            }
-        }catch(FileNotFoundException e){
-            System.out.println(e.getMessage());
-        }
-        student = null;
 
         // 프로그램 시작, 학생 배열의 사이즈 마킹
         lastMark = students.size();
@@ -55,8 +41,9 @@ public class Main {
         System.out.print("-> ");
         select = Integer.parseInt(br.readLine());
 
-        switch(select){
-            case 1:
+        String[] role = {"PROFESSOR", "STUDENT"};
+        switch(role[select - 1]){
+            case "PROFESSOR":
                 System.out.println("* 교직원 접근 권한 필요 *");
                 System.out.print("ACCESS KEY 입력 : ");
                 if(Professor.access(br.readLine()) == 0){
@@ -76,7 +63,7 @@ public class Main {
 
                 break;
 
-            case 2:
+            case "STUDENT":
                 System.out.println("\n등록 이력이 있습니까?");
                 System.out.println("[1] 예 [2] 아니오");
                 System.out.print("-> ");
@@ -109,8 +96,48 @@ public class Main {
                 break;
         }
 
-        // 교수
-        while(professorStart) {
+        if(professorStart)  students = professorStart(professor, students, professorStart);
+        else                studentStart(student, studentStart);
+
+        // 변경점이 존재한다면 데이터 백업
+        if(lastMark < currentMark || check) outputData(students);
+        
+        System.out.println("\n프로그램을 종료합니다. 좋은 하루 보내세요.\n");
+    }
+
+    public static void studentStart(Student s, boolean run) throws IOException{
+        int select;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        while(run){
+            System.out.println("메뉴를 선택해주세요.\n");
+            System.out.println("[1] 성적 조회\n"
+                    + "[2] 내 정보 보기\n"
+                    + "[3] 프로그램 종료\n");
+            System.out.print("-> ");
+            select = Integer.parseInt(br.readLine());
+            switch(select){
+                case 1:
+                    ArrayList<Score> score = s.getScore();
+                    for(Score sc : score){
+                        sc.printScore();
+                    }
+                    break;
+
+                case 2:
+                    s.printProfile();
+                    break;
+
+                case 3:
+                    run = false;
+            }
+        }
+    }
+    public static ArrayList<Student> professorStart(Professor p, ArrayList<Student> students, boolean run) throws IOException{
+        int select;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        Student student;
+
+        while(run) {
             System.out.println("메뉴를 선택해주세요.\n");
             System.out.println("[1] 학생 성적 입력 및 변경\n"
                     + "[2] 프로그램 종료\n");
@@ -128,46 +155,34 @@ public class Main {
 
                     System.out.println();
 
-                    professor.update(student);
+                    p.update(student);
                     check = true;
                     break;
 
                 case 2:
-                    professorStart = false;
+                    run = false;
             }
         }
-        
-        // 학생
-        while(studentStart){
-            System.out.println("메뉴를 선택해주세요.\n");
-            System.out.println("[1] 성적 조회\n"
-                        + "[2] 내 정보 보기\n"
-                        + "[3] 프로그램 종료\n");
-            System.out.print("-> ");
-            select = Integer.parseInt(br.readLine());
-            switch(select){
-                case 1:
-                    ArrayList<Score> score = student.getScore();
-                    for(Score s : score){
-                        s.printScore();
-                    }
-                    break;
-
-                case 2:
-                    student.printProfile();
-                    break;
-
-                case 3:
-                    studentStart = false;
-            }
-        }
-
-        // 변경점이 존재한다면 데이터 백업
-        if(lastMark < currentMark || check) outputData(students);
-        
-        System.out.println("\n프로그램을 종료합니다. 좋은 하루 보내세요.\n");
+        return students;
     }
+    public static ArrayList<Student> loadData() throws IOException{
+        String data;
+        ArrayList<Student> students = new ArrayList<>();
+        Student student;
 
+        try{
+            BufferedReader input = new BufferedReader(new FileReader("src\\DATA.txt"));
+            while((data = input.readLine()) != null){
+                student = inputData(new StringTokenizer(data, ","));
+                students.add(student);
+            }
+        }catch(FileNotFoundException e){
+            System.out.println("불러올 파일이 존재하지 않습니다. 파일을 새로 생성합니다.");
+            BufferedWriter bw = new BufferedWriter(new FileWriter("src\\DATA.txt"));
+            bw.newLine();
+        }
+        return students;
+    }
     public static void printNotice(){
         System.out.println("본 프로그램은 컴퓨터공학과의 성적 관리 프로그램입니다.\n" +
                 "부당한 방법으로 개인 성적의 위,변조를 시도할 경우 학칙에 의거하여 징계처리될 수 있습니다.");
