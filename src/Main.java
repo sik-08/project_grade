@@ -3,16 +3,9 @@ import java.util.*;
 
 public class Main {
     private static boolean check; // 데이터의 변경점이 있는지 체크
-
     public static void main(String[] args) throws IOException {
         // 최초 사이즈와 현재 사이즈를 비교하기 위한 변수
         int lastMark, currentMark;
-
-        // 교수가 접속했다면 true
-        boolean professorStart = false;
-
-        // 학생이 접속했다면 true
-        boolean studentStart = false;
 
         // 성적을 입력할 교수
         Professor professor = null;
@@ -30,19 +23,11 @@ public class Main {
         lastMark = students.size();
         currentMark = students.size();
 
-        System.out.println("[대학교 성적 관리 프로그램]\n");
         printNotice();
 
-        // 메뉴 선택 번호
-        int select;
-
-        System.out.println("사용자 정보를 선택하여 주십시오.");
-        System.out.println("[1] 교직원 [2] 학생");
-        System.out.print("-> ");
-        select = Integer.parseInt(br.readLine());
-
         String[] role = {"PROFESSOR", "STUDENT"};
-        switch(role[select - 1]){
+
+        switch(role[selectMenu() - 1]){
             case "PROFESSOR":
                 System.out.println("* 교직원 접근 권한 필요 *");
                 System.out.print("ACCESS KEY 입력 : ");
@@ -54,7 +39,6 @@ public class Main {
 
                 System.out.println("\n* 접속 성공 *\n");
                 professor = new Professor();
-                professorStart = true;
 
                 if(students.size() == 0){
                     System.out.println("관리할 학생 정보가 없습니다.");
@@ -91,13 +75,12 @@ public class Main {
                 }
 
                 System.out.println("\n*** " + student.getName() + "님 환영합니다. ***\n");
-                studentStart = true;
 
                 break;
         }
 
-        if(professorStart)  students = professorStart(professor, students, professorStart);
-        else                studentStart(student, studentStart);
+        if(Objects.nonNull(professor))  startProfessor(professor, students);
+        else                            startStudent(student);
 
         // 변경점이 존재한다면 데이터 백업
         if(lastMark < currentMark || check) outputData(students);
@@ -105,10 +88,22 @@ public class Main {
         System.out.println("\n프로그램을 종료합니다. 좋은 하루 보내세요.\n");
     }
 
-    public static void studentStart(Student s, boolean run) throws IOException{
+    public static int selectMenu() throws IOException{
         int select;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        while(run){
+
+        System.out.println("사용자 정보를 선택하여 주십시오.");
+        System.out.println("[1] 교직원 [2] 학생");
+        System.out.print("-> ");
+        select = Integer.parseInt(br.readLine());
+
+        return select;
+    }
+
+    public static void startStudent(Student s) throws IOException{
+        int select;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        loop:while(true){
             System.out.println("메뉴를 선택해주세요.\n");
             System.out.println("[1] 성적 조회\n"
                     + "[2] 내 정보 보기\n"
@@ -128,16 +123,17 @@ public class Main {
                     break;
 
                 case 3:
-                    run = false;
+                    break loop;
             }
         }
     }
-    public static ArrayList<Student> professorStart(Professor p, ArrayList<Student> students, boolean run) throws IOException{
+
+    public static void startProfessor(Professor p, ArrayList<Student> students) throws IOException{
         int select;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         Student student;
 
-        while(run) {
+        loop:while(true) {
             System.out.println("메뉴를 선택해주세요.\n");
             System.out.println("[1] 학생 성적 입력 및 변경\n"
                     + "[2] 프로그램 종료\n");
@@ -160,10 +156,9 @@ public class Main {
                     break;
 
                 case 2:
-                    run = false;
+                    break loop;
             }
         }
-        return students;
     }
     public static ArrayList<Student> loadData() throws IOException{
         String data;
@@ -184,11 +179,12 @@ public class Main {
         return students;
     }
     public static void printNotice(){
+        System.out.println("[대학교 성적 관리 프로그램]\n");
         System.out.println("본 프로그램은 컴퓨터공학과의 성적 관리 프로그램입니다.\n" +
                 "부당한 방법으로 개인 성적의 위,변조를 시도할 경우 학칙에 의거하여 징계처리될 수 있습니다.");
     }
 
-    public static void printStudents(ArrayList<Student> students){
+    public static void printStudents(final ArrayList<Student> students){
         System.out.println("[학생 목록]");
         for(int i = 0; i < students.size(); i++){
             System.out.print(students.get(i).getName() +"  ");
@@ -197,7 +193,7 @@ public class Main {
         System.out.println("\n---------------------");
     }
 
-    public static Student searchStudent(ArrayList<Student> students, String name){
+    public static Student searchStudent(final ArrayList<Student> students, final String name){
         for (Student student : students) {
             if (student.getName().equals(name))
                 return student;
@@ -218,7 +214,7 @@ public class Main {
         return student;
     }
 
-    public static void outputData(ArrayList<Student> students) throws IOException{
+    public static void outputData(final ArrayList<Student> students) throws IOException{
         // DATA.txt 에 백업
         BufferedWriter bw = new BufferedWriter(new FileWriter("src\\DATA.txt"));
 
