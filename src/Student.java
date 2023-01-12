@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 public class Student {
@@ -57,6 +58,39 @@ public class Student {
         System.out.println("[" + name + " 학생 수강 목록]");
         for(Score s : score) System.out.print("| " + s.getSubject() + " | ");
         System.out.println("\n------------------------------------------------------");
+    }
+
+    public static Student accessStudent() throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        Student student;
+
+        System.out.println("\n등록 이력이 있습니까?");
+        System.out.println("[1] 예 [2] 아니오");
+        System.out.print("-> ");
+
+        if(Integer.parseInt(br.readLine()) == 2){
+            GradeManagement.check = true;
+            return new Student(2);
+        }
+        else{
+            System.out.println("이름을 입력해주세요.");
+            System.out.print("-> ");
+
+            student = Objects.requireNonNull(GradeManagement.searchStudent(br.readLine()));
+        }
+
+        System.out.println("조회 중입니다.");
+        try{
+            for(int i = 0; i < 3; i++){
+                Thread.sleep(300);
+                System.out.println(".");
+            }
+        }catch(InterruptedException e){
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("\n" + student.getName() + "님 환영합니다.\n");
+        return student;
     }
 
     // Getter , Setter

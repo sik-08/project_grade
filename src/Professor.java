@@ -51,8 +51,15 @@ public class Professor {
         }
     }
 
-    public static int access(String key){
-        if(key.equals(ACCESS_KEY)) return 1;
-        else return 0;
+    public static Professor accessProfessor() throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.println("교직원 접근 권한이 필요합니다.");
+        System.out.print("ACCESS KEY 입력 : ");
+        if(br.readLine().equals(ACCESS_KEY)){
+            System.out.println("\n환영합니다.\n");
+            return new Professor();
+        }
+        return null;
     }
 }
