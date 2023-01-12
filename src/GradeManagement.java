@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 public class GradeManagement{
 
     private static ArrayList<Student> students = new ArrayList<>();
-    public static boolean check = false;
+    public static boolean check;
 
     public static int selectMenu() throws IOException {
         int select;
@@ -64,6 +64,10 @@ public class GradeManagement{
 
             switch (select) {
                 case 1:
+                    if(students.size() == 0){
+                        System.out.println("\n현재 조회 가능한 학생 정보가 없습니다.");
+                        break;
+                    }
                     printStudents();
                     System.out.println("성적을 입력할 학생의 이름을 입력해주세요.(취소 = quit)");
                     System.out.print("-> ");
@@ -96,11 +100,11 @@ public class GradeManagement{
                 students.add(student);
             }
         }catch(FileNotFoundException e){
-            System.out.println("불러올 파일이 존재하지 않습니다. 파일을 새로 생성합니다.");
+            System.out.println("\n불러올 파일이 존재하지 않습니다. 파일을 새로 생성합니다.\n");
             BufferedWriter bw = new BufferedWriter(new FileWriter("src\\DATA.txt"));
             bw.newLine();
 
-            students = null;
+            students = new ArrayList<>();
         }
     }
     public static void printNotice(){
@@ -167,5 +171,9 @@ public class GradeManagement{
 
         System.out.println(end - start);
         bw.close();
+    }
+
+    public static void insertStudent(Student s){
+        students.add(s);
     }
 }

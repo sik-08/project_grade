@@ -44,6 +44,8 @@ public class Student {
         for(String s : subject)
             score.add(new Score(s));
 
+        GradeManagement.insertStudent(this);
+
         System.out.println("***     등록이 완료되었습니다.    ***");
         System.out.println("------------------------------------------------------");
     }
