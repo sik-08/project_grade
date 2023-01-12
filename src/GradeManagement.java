@@ -4,104 +4,107 @@ import java.util.Objects;
 import java.util.StringTokenizer;
 
 public class GradeManagement{
-
     private static ArrayList<Student> students = new ArrayList<>();
     public static boolean check;
     private static Professor professor = null;
     private static Student student = null;
 
     public static void startProgram() throws IOException{
+        printNotice();
+        loadData();
+
         String[] role = {"PROFESSOR", "STUDENT"};
-        switch(role[GradeManagement.selectMenu() - 1]){
+
+        switch(role[GradeManagement.selectMenu("MAIN") - 1]){
             case "PROFESSOR":
                 professor = Professor.accessProfessor();
+                startProfessor();
                 break;
 
             case "STUDENT":
                 student = Student.accessStudent();
+                startStudent();
                 break;
         }
+
+        outputData();
     }
-    public static int selectMenu() throws IOException {
-        int select;
+    public static int selectMenu(String select) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        System.out.println("사용자 정보를 선택하여 주십시오.");
-        System.out.println("[1] 교직원 [2] 학생");
+        switch(select){
+            case "MAIN":
+                System.out.println("사용자 정보를 선택하여 주십시오.");
+                System.out.println("[1] 교직원 [2] 학생");
+                System.out.print("-> ");
+
+            case "PROFESSOR":
+                System.out.println("메뉴를 선택해주세요.\n");
+                System.out.println("[1] 학생 성적 입력 및 변경");
+                System.out.println("[2] 프로그램 종료");
+                System.out.print("-> ");
+
+            case "STUDENT":
+                System.out.println("메뉴를 선택해주세요.\n");
+                System.out.println("[1] 성적 조회");
+                System.out.println("[2] 내 정보 보기");
+                System.out.println("[3] 프로그램 종료");
+                System.out.print("-> ");
+        }
+
+        return Integer.parseInt(br.readLine());
+    }
+
+    public static void startStudent() throws IOException{
+        int select;
+
+        String[] studentMenu = {"GRADE_CHECK", "INFO_CHECK"};
+
+        while((select = selectMenu("STUDENT")) != 3){
+            switch(studentMenu[select - 1]){
+                case "GRADE_CHECK":
+                    for(Score score : student.getScore()){
+                        score.printScore();
+                    }
+                    break;
+
+                case "INFO_CHECK":
+                    student.printProfile();
+                    break;
+            }
+        }
+    }
+
+    public static boolean checkStudents(){
+        if (students.size() == 0) {
+            System.out.println("\n현재 조회 가능한 학생 정보가 없습니다.");
+
+            return false;
+        }
+        return true;
+    }
+
+    public static String setStudent() throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.println("성적을 입력할 학생의 이름을 입력해주세요.");
         System.out.print("-> ");
-        select = Integer.parseInt(br.readLine());
 
-        return select;
+        return br.readLine();
     }
 
-    public static void startStudent(Student s) throws IOException{
-        int select;
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void startProfessor() throws IOException{
+        if(!checkStudents()) return;
+        while(selectMenu("PROFESSOR") != 2) {
+            printStudents();
 
-        loop:while(true){
-            System.out.println("메뉴를 선택해주세요.\n");
-            System.out.println("[1] 성적 조회\n"
-                    + "[2] 내 정보 보기\n"
-                    + "[3] 프로그램 종료\n");
-            System.out.print("-> ");
-            select = Integer.parseInt(br.readLine());
-            switch(select){
-                case 1:
-                    ArrayList<Score> score = s.getScore();
-                    for(Score sc : score){
-                        sc.printScore();
-                    }
-                    break;
+            student = Objects.requireNonNull(searchStudent(setStudent()), "존재하지 않는 학생입니다.");
 
-                case 2:
-                    s.printProfile();
-                    break;
-
-                case 3:
-                    break loop;
-            }
+            professor.update(student);
+            check = true;
         }
     }
 
-    public static void startProfessor(Professor professor) throws IOException{
-        int select;
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        Student student;
-
-        loop:while(true) {
-            System.out.println("메뉴를 선택해주세요.\n");
-            System.out.println("[1] 학생 성적 입력 및 변경\n"
-                    + "[2] 프로그램 종료\n");
-            System.out.print("-> ");
-
-            select = Integer.parseInt(br.readLine());
-
-            switch (select) {
-                case 1:
-                    if(students.size() == 0){
-                        System.out.println("\n현재 조회 가능한 학생 정보가 없습니다.");
-                        break;
-                    }
-                    printStudents();
-                    System.out.println("성적을 입력할 학생의 이름을 입력해주세요.(취소 = quit)");
-                    System.out.print("-> ");
-
-                    String temp = br.readLine();
-                    if(temp.equals("quit")) break;
-
-                    student = Objects.requireNonNull(searchStudent(temp), "존재하지 않는 학생입니다.");
-
-                    System.out.println();
-
-                    professor.update(student);
-                    check = true;
-                    break;
-
-                case 2:
-                    break loop;
-            }
-        }
-    }
     public static void loadData() throws IOException{
         String data;
         Student student;
@@ -121,10 +124,11 @@ public class GradeManagement{
             students = new ArrayList<>();
         }
     }
+
     public static void printNotice(){
         System.out.println("[대학교 성적 관리 프로그램]\n");
-        System.out.println("본 프로그램은 컴퓨터공학과의 성적 관리 프로그램입니다.\n" +
-                "부당한 방법으로 개인 성적의 위,변조를 시도할 경우 학칙에 의거하여 징계처리될 수 있습니다.\n");
+        System.out.println("본 프로그램은 컴퓨터공학과의 성적 관리 프로그램입니다.");
+        System.out.println("부당한 방법으로 개인 성적의 위,변조를 시도할 경우 학칙에 의거하여 징계처리될 수 있습니다.");
     }
 
     public static void printStudents(){
