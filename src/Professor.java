@@ -20,8 +20,8 @@ public class Professor {
 
         student.printProfile();
 
-        System.out.println("성적을 열람하시겠습니까?\n"
-                        + "[1] 예 [2] 아니오");
+        System.out.println("성적을 열람하시겠습니까?");
+        System.out.println("[1] 예 [2] 아니오");
         System.out.print("-> ");
 
         if(br.readLine().equals("1"))
@@ -42,8 +42,8 @@ public class Professor {
             System.out.print("등급 : ");
             score.get(index).setGrade(br.readLine());
 
-            System.out.println("\n성적을 확정하시겠습니까?\n"
-                        + "[1] 예 [2] 아니오");
+            System.out.println("\n성적을 확정하시겠습니까?");
+            System.out.println("[1] 예 [2] 아니오");
             System.out.print("-> ");
         }while(br.readLine().equals("2"));
     }
