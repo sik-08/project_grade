@@ -7,7 +7,21 @@ public class GradeManagement{
 
     private static ArrayList<Student> students = new ArrayList<>();
     public static boolean check;
+    private static Professor professor = null;
+    private static Student student = null;
 
+    public static void startProgram() throws IOException{
+        String[] role = {"PROFESSOR", "STUDENT"};
+        switch(role[GradeManagement.selectMenu() - 1]){
+            case "PROFESSOR":
+                professor = Professor.accessProfessor();
+                break;
+
+            case "STUDENT":
+                student = Student.accessStudent();
+                break;
+        }
+    }
     public static int selectMenu() throws IOException {
         int select;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
