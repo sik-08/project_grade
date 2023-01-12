@@ -36,8 +36,7 @@ public class Professor {
 
         System.out.println("\n[ " + student.getName() + " 학생의 " + score.get(index).getSubject() + " 성적 입력 ]\n");
 
-        boolean run = true;
-        while(run){
+        do{
             System.out.print("점수 : ");
             score.get(index).setScore(br.readLine());
             System.out.print("등급 : ");
@@ -46,9 +45,7 @@ public class Professor {
             System.out.println("\n성적을 확정하시겠습니까?\n"
                         + "[1] 예 [2] 아니오");
             System.out.print("-> ");
-
-            if(br.readLine().equals("1")) run = false;
-        }
+        }while(br.readLine().equals("2"));
     }
 
     public static Professor accessProfessor() throws IOException{

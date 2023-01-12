@@ -27,7 +27,7 @@ public class GradeManagement{
                 break;
         }
 
-        outputData();
+        if(check) outputData();
     }
     public static int selectMenu(String select) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -37,12 +37,14 @@ public class GradeManagement{
                 System.out.println("사용자 정보를 선택하여 주십시오.");
                 System.out.println("[1] 교직원 [2] 학생");
                 System.out.print("-> ");
+                break;
 
             case "PROFESSOR":
                 System.out.println("메뉴를 선택해주세요.\n");
                 System.out.println("[1] 학생 성적 입력 및 변경");
                 System.out.println("[2] 프로그램 종료");
                 System.out.print("-> ");
+                break;
 
             case "STUDENT":
                 System.out.println("메뉴를 선택해주세요.\n");
@@ -50,6 +52,7 @@ public class GradeManagement{
                 System.out.println("[2] 내 정보 보기");
                 System.out.println("[3] 프로그램 종료");
                 System.out.print("-> ");
+                break;
         }
 
         return Integer.parseInt(br.readLine());
@@ -75,6 +78,18 @@ public class GradeManagement{
         }
     }
 
+    public static void startProfessor() throws IOException{
+        if(!checkStudents()) return;
+        while(selectMenu("PROFESSOR") != 2) {
+            printStudents();
+
+            student = Objects.requireNonNull(searchStudent(setStudent()), "존재하지 않는 학생입니다.");
+
+            professor.update(student);
+            check = true;
+        }
+    }
+
     public static boolean checkStudents(){
         if (students.size() == 0) {
             System.out.println("\n현재 조회 가능한 학생 정보가 없습니다.");
@@ -91,18 +106,6 @@ public class GradeManagement{
         System.out.print("-> ");
 
         return br.readLine();
-    }
-
-    public static void startProfessor() throws IOException{
-        if(!checkStudents()) return;
-        while(selectMenu("PROFESSOR") != 2) {
-            printStudents();
-
-            student = Objects.requireNonNull(searchStudent(setStudent()), "존재하지 않는 학생입니다.");
-
-            professor.update(student);
-            check = true;
-        }
     }
 
     public static void loadData() throws IOException{
@@ -163,31 +166,24 @@ public class GradeManagement{
 
     public static void outputData() throws IOException{
         // DATA.txt 에 백업
-        System.out.print("\n[데이터 백업 중] -> ");
-        long start = System.currentTimeMillis();
+        System.out.print("\n[데이터 백업 중. . .]\n");
+
         BufferedWriter bw = new BufferedWriter(new FileWriter("src\\DATA.txt"));
 
         StringBuilder sb = new StringBuilder();
 
         for(Student student : students) {
-            sb.append(student.getStudentNum()).append(",")
-                    .append(student.getName()).append(",")
-                    .append(student.getYear());
-
-            for (Score s : student.getScore()) {
-                sb.append(",")
-                        .append(s.getSubject()).append(",")
-                        .append(s.getScore()).append(",")
-                        .append(s.getGrade());
+            sb.append(student.toString());
+            for (Score score : student.getScore()) {
+                sb.append(",").append(score.toString());
             }
             bw.write(sb.toString());
             bw.flush();
             sb.setLength(0);
             bw.newLine();
         }
-        long end = System.currentTimeMillis();
 
-        System.out.println(end - start);
+        System.out.println("[백업 완료]");
         bw.close();
     }
 

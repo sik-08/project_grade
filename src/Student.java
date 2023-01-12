@@ -95,6 +95,11 @@ public class Student {
         return student;
     }
 
+    @Override
+    public String toString(){
+        return String.format("%s,%s,%s",studentNum,name,year);
+    }
+
     // Getter , Setter
     public String getName() {
         return name;

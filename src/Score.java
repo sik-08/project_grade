@@ -30,8 +30,11 @@ public class Score{
         System.out.printf("[ %s ] / [ %s ] / [ %s ]\n",subject,score,grade);
     }
 
+    @Override
+    public String toString(){
+        return String.format("%s,%s,%s",subject,score,grade);
+    }
     // Getter, Setter
-
     public String getGrade() {
         return grade;
     }
