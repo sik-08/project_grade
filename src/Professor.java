@@ -6,17 +6,15 @@ import java.util.ArrayList;
 public class Professor {
     // 교수 접근 권한 키
     private static final String ACCESS_KEY = "abc3323";
+    private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public void update() throws IOException {
+        Student student = setStudent();
 
-    public void update(Student student) throws IOException {
-        ArrayList<Score> score;
+        ArrayList<Score> score = student.getScore();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        String target;
+        String subject;
 
         int index;
-
-        score = student.getScore();
 
         student.printProfile();
 
@@ -29,10 +27,10 @@ public class Professor {
 
         System.out.println("\n성적을 입력 또는 수정할 과목의 이름을 입력해주세요.");
         System.out.print("-> ");
-        target = br.readLine();
+        subject = br.readLine();
 
         for(index = 0; index < score.size(); index++)
-            if(score.get(index).getSubject().equals(target)) break;
+            if(score.get(index).getSubject().equals(subject)) break;
 
         System.out.println("\n[ " + student.getName() + " 학생의 " + score.get(index).getSubject() + " 성적 입력 ]\n");
 
@@ -58,5 +56,12 @@ public class Professor {
             return new Professor();
         }
         return null;
+    }
+
+    private Student setStudent() throws IOException{
+        System.out.println("성적을 입력할 학생의 이름을 입력해주세요.");
+        System.out.print("-> ");
+
+        return GradeManagement.searchStudent(br.readLine());
     }
 }
